@@ -13,8 +13,6 @@
 */
 namespace Ampersand\Slim\Middleware;
 
-use \Slim\Middleware;
-
 /*
  *
  */
