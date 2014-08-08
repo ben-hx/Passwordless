@@ -1,9 +1,9 @@
 {
-    "name": "thomasklokosch/slim-passwordless-auth",
+    "name": "Ampersand/Slim-PasswordlessAuthentication",
     "type": "library",
     "description": "Passwordless token-based email authentication for the slim microframework",
     "keywords": ["slim", "middleware", "auth"],
-    "homepage": "https://github.com/thomasklokosch/slim-passwordless-auth",
+    "homepage": "https://github.com/getampersand/Slim-PasswordlessAuthentication",
     "license": "MIT",
     "require": {
         "php": ">=5.4.0",
@@ -18,7 +18,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Slim\\Middleware\\": "src/Slim/Middleware"
+            "Ampersand\\Slim\\": "src/Slim/"
         }
     }
 }

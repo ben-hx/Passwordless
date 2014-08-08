@@ -11,7 +11,9 @@
 * https://github.com/thomasklokosch/slim-passwordless-auth
 *
 */
-namespace Slim\Middleware;
+namespace Ampersand\Slim\Middleware;
+
+use \Slim\Middleware;
 
 /*
  *
