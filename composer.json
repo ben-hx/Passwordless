@@ -1,5 +1,5 @@
 {
-    "name": "slim/passwordless",
+    "name": "thomasklokosch/slim-passwordless-auth",
     "license": "MIT",
     "require": {
         "php": ">=5.4.0",
