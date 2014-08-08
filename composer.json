@@ -1,13 +1,24 @@
 {
     "name": "thomasklokosch/slim-passwordless-auth",
+    "type": "library",
+    "description": "Passwordless token-based email authentication for the slim microframework",
+    "keywords": ["slim", "middleware", "auth"],
+    "homepage": "https://github.com/thomasklokosch/slim-passwordless-auth",
     "license": "MIT",
     "require": {
         "php": ">=5.4.0",
         "slim/slim": "2.*"
     },
+    "authors": [
+        {
+            "name": "Thomas Klokosch",
+            "email": "mail@thomasklokosch.com",
+            "homepage": "http://thomasklokosch.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
-            "slim\\passwordless\\": "src/"
+            "Slim\\Middleware\\": "src/Slim/Middleware"
         }
     }
 }
