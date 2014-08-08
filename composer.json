@@ -1,0 +1,13 @@
+{
+    "name": "Slim Passwordless Auth",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4.0",
+        "slim/slim": "2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "slim\\passwordless\\": "src/"
+        }
+    }
+}
