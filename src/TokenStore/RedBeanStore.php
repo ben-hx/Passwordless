@@ -3,6 +3,7 @@
 namespace Ampersand\Passwordless\TokenStore;
 
 use Ampersand\Passwordless\TokenStore;
+use R;
 
 
 class RedBeanStore extends AbstractTokenStore
@@ -15,7 +16,9 @@ class RedBeanStore extends AbstractTokenStore
     {
         $this->config = array(
             'hash_algorithm' => 'sha256',   # Use sha256 hash for user id
-            'expire' => (86400 * 365)       # Expires in one year by default
+            'hash_usernames' => true,       # Should usernames be hashed?
+            'expire' => (86400 * 365),      # Expires in one year by default
+            'tablename' => 'users'          # Table name for tokens and user id's / hashes
         );
 
         $this->config = array_merge($this->config, $config);
@@ -25,6 +28,8 @@ class RedBeanStore extends AbstractTokenStore
     # Create a token
     public function createToken($userId)
     {
+        $token = hash('sha256',mt_rand(0,1000));
+        return $token;
     }
 
 
