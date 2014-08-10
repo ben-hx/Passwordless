@@ -44,9 +44,16 @@ class Passwordless
     }
 
 
-    public function getToken($userId)
+    public function getUserTokens($userId)
     {
-        $token = $this->tokenStore->getToken($userId);
+        $token = $this->tokenStore->getUserTokens($userId);
+        return $token;
+    }
+
+
+    public function invalidateToken($tokenId)
+    {
+        $token = $this->tokenStore->invalidateToken($tokenId);
         return $token;
     }
 
