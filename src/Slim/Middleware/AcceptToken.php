@@ -8,15 +8,15 @@
 * http://www.opensource.org/licenses/mit-license.php
 *
 * Project home:
-* https://github.com/thomasklokosch/slim-passwordless-auth
+* https://github.com/thomasklokosch/GetAmpersand/Passwordless
 *
 */
-namespace Ampersand\Slim\Middleware;
+namespace Ampersand\Passwordless\Slim\Middleware;
 
 /*
  *
  */
-class PasswordlessAuthentication extends \Slim\Middleware
+class AcceptToken extends \Slim\Middleware
 {
 
     public function __construct()
