@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/GetAmpersand/HTML.png)](https://travis-ci.org/GetAmpersand/HTML)
+
 Passwordless authentication for the PHP Slim microframework
 ===========================================================
 
