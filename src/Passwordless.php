@@ -16,7 +16,7 @@ class Passwordless
      *
      * Usage:
      *      $passwordless = new Passwordless(
-     *          new \Ampersand\Passwordless\TokenStore\RedBean(array(
+     *          new \Ampersand\Passwordless\TokenStore\RedBean($redbeanStore, array(
      *              'expire' => '365'
      *          ), array()
      *      );
