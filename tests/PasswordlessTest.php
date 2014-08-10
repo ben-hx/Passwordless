@@ -24,7 +24,6 @@ class PasswordlessTest extends \PHPUnit_Framework_TestCase
 
         $this->storeMock->expects($this->any())
             ->method('createToken')
-            ->with('test@test.com')
             ->will($this->returnValue(hash('sha256',mt_rand(0,1000))));
 
         $this->passwordless = new Passwordless($this->storeMock, array());
@@ -67,7 +66,7 @@ class PasswordlessTest extends \PHPUnit_Framework_TestCase
      */
     public function testIfTokenCanBeRequested()
     {
-        $token = $this->passwordless->requestToken('test@test.com');
+        $token = $this->passwordless->requestToken();
         $this->assertNotEmpty($token);
     }
 

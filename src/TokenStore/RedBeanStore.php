@@ -18,7 +18,7 @@ class RedBeanStore extends AbstractTokenStore
             'hash_algorithm' => 'sha256',   # Use sha256 hash for user id
             'hash_usernames' => true,       # Should usernames be hashed?
             'expire' => (86400 * 365),      # Expires in one year by default
-            'tablename' => 'users'          # Table name for tokens and user id's / hashes
+            'tablename' => 'token'          # Table name for tokens and user id's / hashes
         );
 
         $this->config = array_merge($this->config, $config);
@@ -26,7 +26,7 @@ class RedBeanStore extends AbstractTokenStore
 
 
     # Create a token
-    public function createToken($userId)
+    public function createToken()
     {
         $token = hash('sha256',mt_rand(0,1000));
         return $token;
@@ -40,14 +40,19 @@ class RedBeanStore extends AbstractTokenStore
     }
 
 
-    # Get and set token in the store
-    public function setToken()
+    public function setToken($userId, $token)
     {
+        $token = R::dispense($this->config['tablename']);
+        $token->user = $this->config['hash_usernames'] ? $this->createUserHash($userId) : $userId;
+        $token->token = $this->createToken();
+        $token->store();
     }
 
 
-    public function getToken()
+    public function getToken($userId)
     {
+        $token = R::load($this->config['tablename']);
+        return $token->token;
     }
 
 }

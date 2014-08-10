@@ -37,9 +37,9 @@ class Passwordless
     }
 
 
-    public function requestToken($userId)
+    public function requestToken()
     {
-        $token = $this->tokenStore->createToken($userId);
+        $token = $this->tokenStore->createToken();
         return $token;
     }
 
