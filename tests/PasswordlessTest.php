@@ -66,7 +66,7 @@ class PasswordlessTest extends \PHPUnit_Framework_TestCase
      */
     public function testIfTokenCanBeRequested()
     {
-        $token = $this->passwordless->requestToken();
+        $token = $this->passwordless->requestToken('test@test.com');
         $this->assertNotEmpty($token);
     }
 

@@ -7,7 +7,7 @@ abstract class AbstractTokenStore
     abstract public function __construct($store, $config = array());
 
     # Create a token
-    abstract public function createToken();
+    abstract public function createToken($userId);
 
     # Get and set token in the store
     abstract public function setToken($userId, $token);

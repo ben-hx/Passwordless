@@ -26,9 +26,10 @@ class RedBeanStore extends AbstractTokenStore
 
 
     # Create a token
-    public function createToken()
+    public function createToken($userId)
     {
         $token = hash('sha256',mt_rand(0,1000));
+        $this->setToken($userId,$token);
         return $token;
     }
 
@@ -44,7 +45,7 @@ class RedBeanStore extends AbstractTokenStore
     {
         $token = R::dispense($this->config['tablename']);
         $token->user = $this->config['hash_usernames'] ? $this->createUserHash($userId) : $userId;
-        $token->token = $this->createToken();
+        $token->token = $token;
         $token->store();
     }
 
