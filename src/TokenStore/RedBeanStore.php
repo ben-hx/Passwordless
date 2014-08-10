@@ -46,6 +46,7 @@ class RedBeanStore extends AbstractTokenStore
         $record = R::dispense($this->config['tablename']);
         $record->user = $this->config['hash_usernames'] ? $this->createUserHash($userId) : $userId;
         $record->token = $token;
+        $record->invalidated = false;
         R::store($record);
     }
 

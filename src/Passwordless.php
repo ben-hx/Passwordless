@@ -44,6 +44,13 @@ class Passwordless
     }
 
 
+    public function getToken($userId)
+    {
+        $token = $this->tokenStore->getToken($userId);
+        return $token;
+    }
+
+
     public function getUserHash($userId)
     {
         $hash = $this->tokenStore->createUserHash($userId);
