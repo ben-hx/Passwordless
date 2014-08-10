@@ -5,6 +5,10 @@ namespace Ampersand\Passwordless;
 class Passwordless
 {
 
+    private $tokenStore;
+
+    private $tokenDelivery = array();
+
     /**
      * Constructor accepting configuration options
      *
@@ -12,21 +16,18 @@ class Passwordless
      *
      * Usage:
      *      $passwordless = new Passwordless(
-     *          'tokenDelivery' =>
-     *          ),
-     *          'tokenStore' => new \Ampersand\Passwordless\TokenStore\RedBean(array(
-     *                  'expire' => '365'
-     *              )
-     *          )
+     *          new \Ampersand\Passwordless\TokenStore\RedBean(array(
+     *              'expire' => '365'
+     *          ), array()
      *      );
      *
      *      $passwordless->addDelivery(new \Ampersand\Passwordless\TokenDelivery\SwiftMailer(array(
      *          'mailFrom' => 'token@mycompany.com'
      *      ));
      */
-    public function __construct($config)
+    public function __construct($tokenStore, $config = array())
     {
-
+        $this->tokenStore = $tokenStore;
     }
 
 
@@ -36,9 +37,17 @@ class Passwordless
     }
 
 
-    public function requestToken()
+    public function requestToken($userId)
     {
-        return true;
+        $token = $this->tokenStore->createToken($userId);
+        return $token;
+    }
+
+
+    public function getUserHash($userId)
+    {
+        $hash = $this->tokenStore->createUserHash($userId);
+        return $hash;
     }
 
 }
