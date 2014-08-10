@@ -22,7 +22,6 @@
             <directory>./</directory>
             <exclude>
                 <directory>./res</directory>
-                <directory>./tests</directory>
                 <directory>./vendor</directory>
             </exclude>
         </whitelist>
