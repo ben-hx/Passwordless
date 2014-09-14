@@ -51,9 +51,9 @@ class RedBeanStore extends AbstractTokenStore
     }
 
 
-    public function getToken($tokenId)
+    public function getToken($token)
     {
-        $record = R::find($this->config['tablename'],'token = ?', array($tokenId));
+        $record = R::findOne($this->config['tablename'],'token = ?', array($token));
         return $record;
     }
 
@@ -65,5 +65,16 @@ class RedBeanStore extends AbstractTokenStore
         return $records;
     }
 
+
+    public function invalidateToken($token)
+    {
+        $record = $this->getToken( $token );
+        if(is_object( $token )){
+            $record->invalidated = true;
+            R::store($record);
+            return true;
+        }
+        return false;
+    }
 }
 
