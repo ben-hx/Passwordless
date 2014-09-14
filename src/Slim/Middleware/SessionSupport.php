@@ -16,7 +16,7 @@ namespace Ampersand\Passwordless\Slim\Middleware;
 /*
  *
  */
-class AcceptToken extends \Slim\Middleware
+class SessionSupport extends \Slim\Middleware
 {
 
     public function __construct()
@@ -26,7 +26,7 @@ class AcceptToken extends \Slim\Middleware
 
     public function call()
     {
-        $this->app->log->info("Accept Token Middleware running");
+        $this->app->log->info("Restoring user from session");
         $this->next->call();
     }
 
