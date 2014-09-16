@@ -4,7 +4,7 @@ namespace Ampersand\Passwordless\TokenStore;
 
 abstract class AbstractTokenStore
 {
-    abstract public function __construct($store, $config = array());
+    abstract public function __construct($config = array());
 
     # Create a token
     abstract public function createToken($userId);

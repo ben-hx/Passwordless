@@ -12,7 +12,7 @@ class RedBeanStore extends AbstractTokenStore
     private $config = array();
 
 
-    public function __construct($store = null, $config = array())
+    public function __construct($config = array())
     {
         $this->config = array(
             'hash_algorithm' => 'sha256',   # Use sha256 hash for user id

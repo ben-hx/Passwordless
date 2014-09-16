@@ -23,21 +23,32 @@ class AcceptToken extends \Slim\Middleware
     private $tokenStore;
 
     // Constructor function needs to be given a valid tokenStore
-    public function __construct($tokenStore)
+    public function __construct($tokenStore, $sessionStore)
     {
         // TODO: Check if tokenStore is valid
         $this->tokenStore = $tokenStore;
+        $this->sessionStore = $sessionStore;
     }
 
     public function call() {
 
         $token = $this->app->request->get('token');
-        $this->app->log->info("Token: ".$token);
+        $userId = $this->app->request->get('user');
+
         if($token){
             if($this->tokenStore->invalidateToken($token)){
+
+                # The token is available and hasn't been invalidated yet
                 $this->app->log->info("Valid token: ".$token);
+
+                # Create a session in the store
+                $this->sessionStore->createSession($userId);
+
             } else {
+
+                # The token is not found or not valid anymore
                 $this->app->log->error("Invalid token: ".$token);
+
             }
         }
 
