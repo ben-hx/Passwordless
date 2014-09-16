@@ -35,9 +35,9 @@ class AcceptToken extends \Slim\Middleware
         $this->app->log->info("Token: ".$token);
         if($token){
             if($this->tokenStore->invalidateToken($token)){
-                $this->app->log->info("Valid token");
+                $this->app->log->info("Valid token: ".$token);
             } else {
-                $this->app->log->error("Invalid token");
+                $this->app->log->error("Invalid token: ".$token);
             }
         }
 

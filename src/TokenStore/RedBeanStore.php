@@ -69,7 +69,11 @@ class RedBeanStore extends AbstractTokenStore
     public function invalidateToken($token)
     {
         $record = $this->getToken( $token );
-        if(is_object( $token )){
+        if(is_object( $record )){
+
+            # Check if token is still valid
+            if($record->invalidated) return false;
+
             $record->invalidated = true;
             R::store($record);
             return true;
