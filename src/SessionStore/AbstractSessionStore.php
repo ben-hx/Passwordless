@@ -8,5 +8,6 @@ abstract class AbstractSessionStore
 
     # Create a session entry
     abstract public function createSession($userName);
+    abstract public function destroySession($sessionId);
 }
 

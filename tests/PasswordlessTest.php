@@ -15,18 +15,19 @@ class PasswordlessTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 
-        $this->storeMock = $this->getMock('\Ampersand\Passwordless\TokenStore\RedBeanStore');
+        $this->tokenStoreMock = $this->getMock('\Ampersand\Passwordless\TokenStore\RedBeanStore');
+        $this->sessionStoreMock = $this->getMock('\Ampersand\Passwordless\SessionStore\RedBeanStore');
 
-        $this->storeMock->expects($this->any())
+        $this->tokenStoreMock->expects($this->any())
             ->method('createUserHash')
             ->with('test@test.com')
             ->will($this->returnValue(hash('sha256','test@test.com')));
 
-        $this->storeMock->expects($this->any())
+        $this->tokenStoreMock->expects($this->any())
             ->method('createToken')
             ->will($this->returnValue(hash('sha256',mt_rand(0,1000))));
 
-        $this->passwordless = new Passwordless($this->storeMock, array());
+        $this->passwordless = new Passwordless($this->tokenStoreMock, $this->sessionStoreMock, array());
     }
 
 
@@ -35,7 +36,7 @@ class PasswordlessTest extends \PHPUnit_Framework_TestCase
      */
     public function testIfPasswordlessCanBeInitialized()
     {
-        $passwordless = new Passwordless(array());
+        $passwordless = new Passwordless($this->tokenStoreMock, $this->sessionStoreMock, array());
         $this->assertTrue( $passwordless instanceof Passwordless );
     }
 

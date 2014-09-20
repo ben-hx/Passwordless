@@ -18,15 +18,32 @@ namespace Ampersand\Passwordless\Slim\Middleware;
  */
 class SessionSupport extends \Slim\Middleware
 {
+    private $tokenStore;
+    private $sessionStore;
 
-    public function __construct()
+    public function __construct($tokenStore, $sessionStore)
     {
-
+        // TODO: Check if tokenStore is valid
+        $this->tokenStore = $tokenStore;
+        $this->sessionStore = $sessionStore;
     }
 
     public function call()
     {
-        $this->app->log->info("Restoring user from session");
+        if(!isset($_SESSION['passwordless']['session'])){
+
+            $this->app->log->info("Restoring user from session");
+
+            $sessionData = $this->sessionStore->getSessionData();
+
+            if(is_object($sessionData)){
+                $this->app->log->info("Success for user: ".$sessionData->user);
+                $_SESSION['passwordless']['user'] = $sessionData->user;
+                $_SESSION['passwordless']['session'] = $sessionData->session;
+            }
+
+        }
+
         $this->next->call();
     }
 

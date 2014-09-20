@@ -21,6 +21,7 @@ use \Ampersand\Passwordless\TokenStore;
 class AcceptToken extends \Slim\Middleware
 {
     private $tokenStore;
+    private $sessionStore;
 
     // Constructor function needs to be given a valid tokenStore
     public function __construct($tokenStore, $sessionStore)
@@ -43,6 +44,10 @@ class AcceptToken extends \Slim\Middleware
 
                 # Create a session in the store
                 $this->sessionStore->createSession($userId);
+
+                # Redirect to root page
+                # TODO: Make configurable
+                $this->app->redirect('/');
 
             } else {
 

@@ -6,6 +6,7 @@ class Passwordless
 {
 
     private $tokenStore;
+    private $sessionStore;
 
     private $tokenDelivery = array();
 
@@ -25,9 +26,10 @@ class Passwordless
      *          'mailFrom' => 'token@mycompany.com'
      *      ));
      */
-    public function __construct($tokenStore, $config = array())
+    public function __construct($tokenStore, $sessionStore, $config = array())
     {
         $this->tokenStore = $tokenStore;
+        $this->sessionStore = $sessionStore;
     }
 
 
@@ -64,4 +66,9 @@ class Passwordless
         return $hash;
     }
 
+
+    public function logout($sessionId)
+    {
+        return $this->sessionStore->destroySession($sessionId);
+    }
 }

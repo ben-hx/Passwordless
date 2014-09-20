@@ -11,6 +11,7 @@ class RedBeanStore extends AbstractSessionStore
     private $config = array();
     private $cookieData = array();
 
+
     public function __construct($config = array())
     {
         $this->config = array(
@@ -36,15 +37,33 @@ class RedBeanStore extends AbstractSessionStore
         $sessionId = hash('sha256',mt_rand(0,1000));
 
         # Setup session data for storage in the cookie
-        $cookieData['userId'] = $userId;
-        $cookieData['sessionId'] = $sessionId;
+        $cookieData['user'] = $userHash;
+        $cookieData['session'] = $sessionId;
 
         # Set the cookie
         setCookie($this->config['cookie_name'], json_encode($cookieData), time()+$this->config['expire'], $this->config['cookie_path']);
 
+        $_SESSION['passwordless']['user'] = $userHash;
+        $_SESSION['passwordless']['session'] = $sessionId;
+
         $record = R::dispense($this->config['tablename']);
         $record->user = $userHash;
+        $record->session = $sessionId;
         R::store($record);
+    }
+
+
+    public function destroySession($sessionId)
+    {
+        # Remove cookie by setting the expiration time to the past
+        setcookie($this->config['cookie_name'], '', time()-3600);
+
+        # Unset session variables
+        unset($_SESSION['passwordless']);
+
+        # Get user session record from database and remove it
+        $record = R::findOne($this->config['tablename'],'session = ?', [$sessionId]);
+        R::trash($record);
     }
 
 
@@ -52,6 +71,22 @@ class RedBeanStore extends AbstractSessionStore
     public function createUserHash($userId)
     {
         return hash($this->config['hash_algorithm'],$userId);
+    }
+
+
+    public function getSessionData()
+    {
+        if(isset($_COOKIE[$this->config['cookie_name']]) && !empty($_COOKIE[$this->config['cookie_name']])){
+
+            # Get cookie data as array, user and session id
+            $cookieData = json_decode($_COOKIE[$this->config['cookie_name']],true);
+
+            # Get user session record from database
+            $record = R::findOne($this->config['tablename'],'user = ? AND session = ?', array($cookieData['user'],$cookieData['session']));
+            return $record;
+        }
+
+        return false;
     }
 
 }
