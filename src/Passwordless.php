@@ -35,13 +35,30 @@ class Passwordless
 
     public function addDelivery($delivery)
     {
-        return true;
+        if( is_object($delivery) ){
+            $this->tokenDelivery[] = $delivery;
+            return true;
+        }
+
+        return false;
     }
 
 
+    /*
+     * Request a token
+     *
+     * @param $userId The users e-mail address is also the user id
+     */
     public function requestToken($userId)
     {
         $token = $this->tokenStore->createToken($userId);
+
+        if (!empty( $this->tokenDelivery ) && count($this->tokenDelivery)>0 ) {
+            foreach($this->tokenDelivery as $key => $delivery ){
+                $delivery->deliver( $token, $this->getUserHash($userId), $userId );
+            }
+        }
+
         return $token;
     }
 

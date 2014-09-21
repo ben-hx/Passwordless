@@ -38,8 +38,6 @@ class SessionSupport extends \Slim\Middleware
 
             if(is_object($sessionData)){
                 $this->app->log->info("Success for user: ".$sessionData->user);
-                $_SESSION['passwordless']['user'] = $sessionData->user;
-                $_SESSION['passwordless']['session'] = $sessionData->session;
             }
 
         }

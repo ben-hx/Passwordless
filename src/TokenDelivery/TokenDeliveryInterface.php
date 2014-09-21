@@ -4,5 +4,5 @@ namespace Ampersand\Passwordless\TokenDelivery;
 
 interface TokenDeliveryInterface
 {
-    public function deliver();
+    public function deliver( $token, $userId, $mail = '');
 }
