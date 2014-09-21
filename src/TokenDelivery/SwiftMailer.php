@@ -16,6 +16,7 @@ class SwiftMailer implements TokenDeliveryInterface
             'fromMail' => 'passwordless@localhost',
             'fromName' => 'Passwordless',
             'subject'  => 'Your access link',
+            'loginURL' => 'http://localhost:8080/login',
             'template' => ''
         ];
 
@@ -30,7 +31,7 @@ class SwiftMailer implements TokenDeliveryInterface
           ->setSubject($this->config['subject'])
           ->setFrom(array($this->config['fromMail'] => $this->config['fromName']))
           ->setTo(array($mail))
-          ->setBody('Login URL: http://localhost:8080/?user='.$userId.'&token='.$token);
+          ->setBody('Login URL: '.$this->config['loginURL'].'?user='.$userId.'&token='.$token);
 
         $transport = \Swift_SmtpTransport::newInstance( $this->config['smtpServer'], $this->config['smtpPort'], ($this->config['smtpUseSSL'] ? 'ssl' : '') )
           ->setUsername( $this->config['smtpUsername'] )
