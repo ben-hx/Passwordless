@@ -32,12 +32,10 @@ class SessionSupport extends \Slim\Middleware
     {
         if(!isset($_SESSION['passwordless']['session'])){
 
-            $this->app->log->info("Restoring user from session");
-
             $sessionData = $this->sessionStore->getSessionData();
 
             if(is_object($sessionData)){
-                $this->app->log->info("Success for user: ".$sessionData->user);
+                $this->app->log->info("Restoring user from session: ".$sessionData->user);
             }
 
         }

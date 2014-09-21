@@ -43,8 +43,8 @@ class RedBeanStore extends AbstractSessionStore
         # Set the cookie
         setCookie($this->config['cookie_name'], json_encode($cookieData), time()+$this->config['expire'], $this->config['cookie_path']);
 
-        $_SESSION['passwordless']['user'] = $userHash;
-        $_SESSION['passwordless']['session'] = $sessionId;
+        # Set the $_SESSION variables
+        $this->setSession( $userHash, $sessionId);
 
         $record = R::dispense($this->config['tablename']);
         $record->user = $userHash;
@@ -83,10 +83,23 @@ class RedBeanStore extends AbstractSessionStore
 
             # Get user session record from database
             $record = R::findOne($this->config['tablename'],'user = ? AND session = ?', array($cookieData['user'],$cookieData['session']));
+
+            # If the session is already registered in the database,
+            # set the $_SESSION variables
+            if (is_object($record)) $this->setSession( $record->user, $record->session );
+
             return $record;
         }
 
         return false;
+    }
+
+
+    private function setSession( $user, $session)
+    {
+        # Set the $_SESSION variables
+        $_SESSION['passwordless']['user'] = $user;
+        $_SESSION['passwordless']['session'] = $session;
     }
 
 }
