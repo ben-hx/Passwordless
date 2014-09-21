@@ -9,19 +9,17 @@ use R;
 class RedBeanStore extends AbstractSessionStore
 {
     private $config = array();
-    private $cookieData = array();
 
 
     public function __construct($config = array())
     {
         $this->config = array(
-            'hash_algorithm' => 'sha256',   # Use sha256 hash for user id
-            'hash_usernames' => true,       # Should usernames be hashed?
-            'cookie_name' => 'passwordless', # Cookie name
+            'cookie_name' => 'passwordless',    # Cookie name
             'cookie_path' => '/',
             'cookie_domain' => 'localhost',
-            'expire' => 86400,              # Expires in one week by default
-            'tablename' => 'session'        # Table name for tokens and user id's / hashes
+            'expire' => 86400,                  # Expires in one week by default
+            'tablename' => 'session',           # Table name for tokens and user id's / hashes
+            'onCreateSessionRecord' => null     # Callback function on createSession()
         );
 
         $this->config = array_merge($this->config, $config);
@@ -30,25 +28,30 @@ class RedBeanStore extends AbstractSessionStore
 
     public function createSession($userId)
     {
-        # Hash username if option is set
-        $userHash = $this->config['hash_usernames'] ? $this->createUserHash($userId) : $userId;
-
         # Get a random session identifier
         $sessionId = hash('sha256',mt_rand(0,1000));
 
         # Setup session data for storage in the cookie
-        $cookieData['user'] = $userHash;
+        $cookieData['user'] = $userId;
         $cookieData['session'] = $sessionId;
 
         # Set the cookie
         setCookie($this->config['cookie_name'], json_encode($cookieData), time()+$this->config['expire'], $this->config['cookie_path']);
 
         # Set the $_SESSION variables
-        $this->setSession( $userHash, $sessionId);
+        $this->setSession( $userId, $sessionId);
 
         $record = R::dispense($this->config['tablename']);
-        $record->user = $userHash;
+        $record->user = $userId;
         $record->session = $sessionId;
+
+        if (is_callable($this->config['onCreateSessionRecord'])){
+            call_user_func_array(
+                $this->config['onCreateSessionRecord'],
+                [$record,$userId]
+            );
+        }
+
         R::store($record);
     }
 
@@ -64,13 +67,6 @@ class RedBeanStore extends AbstractSessionStore
         # Get user session record from database and remove it
         $record = R::findOne($this->config['tablename'],'session = ?', [$sessionId]);
         R::trash($record);
-    }
-
-
-    # Create user id hash
-    public function createUserHash($userId)
-    {
-        return hash($this->config['hash_algorithm'],$userId);
     }
 
 
