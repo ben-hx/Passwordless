@@ -19,7 +19,8 @@ class RedBeanStore extends AbstractSessionStore
             'cookie_domain' => 'localhost',
             'expire' => 86400,                  # Expires in one week by default
             'tablename' => 'session',           # Table name for tokens and user id's / hashes
-            'onCreateSessionRecord' => null     # Callback function on createSession()
+            'onCreateSessionRecord' => null,    # Callback function on createSession()
+            'onSetSession' => null
         );
 
         $this->config = array_merge($this->config, $config);
@@ -38,9 +39,6 @@ class RedBeanStore extends AbstractSessionStore
         # Set the cookie
         setCookie($this->config['cookie_name'], json_encode($cookieData), time()+$this->config['expire'], $this->config['cookie_path']);
 
-        # Set the $_SESSION variables
-        $this->setSession( $userId, $sessionId);
-
         $record = R::dispense($this->config['tablename']);
         $record->user = $userId;
         $record->session = $sessionId;
@@ -51,6 +49,9 @@ class RedBeanStore extends AbstractSessionStore
                 [$record,$userId]
             );
         }
+
+        # Set the $_SESSION variables
+        $this->setSession( $record );
 
         R::store($record);
     }
@@ -82,7 +83,7 @@ class RedBeanStore extends AbstractSessionStore
 
             # If the session is already registered in the database,
             # set the $_SESSION variables
-            if (is_object($record)) $this->setSession( $record->user, $record->session );
+            if (is_object($record)) $this->setSession( $record );
 
             return $record;
         }
@@ -91,11 +92,18 @@ class RedBeanStore extends AbstractSessionStore
     }
 
 
-    private function setSession( $user, $session)
+    private function setSession( $record )
     {
         # Set the $_SESSION variables
-        $_SESSION['passwordless']['user'] = $user;
-        $_SESSION['passwordless']['session'] = $session;
+        $_SESSION['passwordless']['user'] = $record->user;
+        $_SESSION['passwordless']['session'] = $record->session;
+
+        if (is_callable($this->config['onSetSession'])){
+            call_user_func_array(
+                $this->config['onSetSession'],
+                [$record]
+            );
+        }
     }
 
 }

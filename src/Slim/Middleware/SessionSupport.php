@@ -21,12 +21,14 @@ class SessionSupport extends \Slim\Middleware
     private $tokenStore;
     private $sessionStore;
 
+
     public function __construct($tokenStore, $sessionStore)
     {
         // TODO: Check if tokenStore is valid
         $this->tokenStore = $tokenStore;
         $this->sessionStore = $sessionStore;
     }
+
 
     public function call()
     {
