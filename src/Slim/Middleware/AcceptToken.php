@@ -45,10 +45,6 @@ class AcceptToken extends \Slim\Middleware
                 # Create a session in the store
                 $this->sessionStore->createSession($userId);
 
-                # Redirect to root page
-                # TODO: Make configurable
-                $this->app->redirect('/');
-
             } else {
 
                 # The token is not found or not valid anymore
