@@ -40,7 +40,7 @@ class AcceptToken extends \Slim\Middleware
             if($this->tokenStore->invalidateToken($token)){
 
                 # The token is available and hasn't been invalidated yet
-                $this->app->log->info("Valid token: ".$token);
+                $this->app->log->info("VALID token ".$token." for user ".$userId);
 
                 # Create a session in the store
                 $this->sessionStore->createSession($userId);
@@ -48,7 +48,7 @@ class AcceptToken extends \Slim\Middleware
             } else {
 
                 # The token is not found or not valid anymore
-                $this->app->log->error("Invalid token: ".$token);
+                $this->app->log->error("INVALID token ".$token." for user ".$userId);
 
             }
         }
