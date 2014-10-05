@@ -55,7 +55,7 @@ class Passwordless
 
         if (!empty( $this->tokenDelivery ) && count($this->tokenDelivery)>0 ) {
             foreach($this->tokenDelivery as $key => $delivery ){
-                $delivery->deliver( $token, $this->getUserHash($userId), $userId );
+                $delivery->deliver( $token, $this->tokenStore->getUserId($userId), $userId );
             }
         }
 
@@ -74,13 +74,6 @@ class Passwordless
     {
         $token = $this->tokenStore->invalidateToken($tokenId);
         return $token;
-    }
-
-
-    public function getUserHash($userId)
-    {
-        $hash = $this->tokenStore->createUserHash($userId);
-        return $hash;
     }
 
 

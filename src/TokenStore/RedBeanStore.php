@@ -57,6 +57,12 @@ class RedBeanStore extends AbstractTokenStore
     }
 
 
+    public function getUserId($userId)
+    {
+        return $this->config['hash_usernames'] ? $this->createUserHash($userId) : $userId;
+    }
+
+
     public function getUserTokens($userId)
     {
         $userId = $this->config['hash_usernames'] ? $this->createUserHash($userId) : $userId;
